@@ -12,6 +12,7 @@ import Movements from "./pages/Movements.jsx";
 import Btg from "./pages/Btg.jsx";
 import Revenue from "./pages/Revenue.jsx";
 import Purchases from "./pages/Purchases.jsx";
+import Spreadsheet from "./pages/Spreadsheet.jsx";
 import Layout from "./components/Layout.jsx";
 
 // ── Guards ──────────────────────────────────────────────────────────────
@@ -52,6 +53,7 @@ function App() {
           <Route path="/movements" element={<OwnerRoute><Movements /></OwnerRoute>} />
           <Route path="/btg" element={<OwnerRoute><Btg /></OwnerRoute>} />
           <Route path="/purchases" element={<OwnerRoute><Purchases /></OwnerRoute>} />
+          <Route path="/spreadsheet" element={<OwnerRoute><Spreadsheet /></OwnerRoute>} />
 
           {/* Shared routes */}
           <Route path="/catalog" element={<Catalog />} />
