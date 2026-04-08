@@ -12,8 +12,13 @@ import { BRAND, ACCENT, CLR } from "../theme.js";
 export default function WineDetail({ wine, onClose, onEdit, onAdjustStock, onOpenBtg }) {
   const [movements, setMovements] = useState([]);
   const [btgSessions, setBtgSessions] = useState([]);
+  const [stockRows, setStockRows] = useState([]);
   const [loadingMovements, setLoadingMovements] = useState(true);
   const [loadingBtg, setLoadingBtg] = useState(true);
+  const [loadingStock, setLoadingStock] = useState(true);
+  const [editingStockId, setEditingStockId] = useState(null);
+  const [editStockQty, setEditStockQty] = useState("");
+  const [savingStock, setSavingStock] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
 
   // Lazy-load movements and BTG sessions for this wine
@@ -43,7 +48,40 @@ export default function WineDetail({ wine, onClose, onEdit, onAdjustStock, onOpe
       setBtgSessions(data || []);
       setLoadingBtg(false);
     })();
+
+    (async () => {
+      setLoadingStock(true);
+      const { data } = await supabase
+        .from("inventory")
+        .select("id,location,shelf_location,quantity,census_date")
+        .eq("wine_id", wine.id)
+        .order("location");
+      setStockRows(data || []);
+      setLoadingStock(false);
+    })();
   }, [wine?.id]);
+
+  const handleStockSave = async (row) => {
+    const newQty = parseInt(editStockQty);
+    if (isNaN(newQty) || newQty < 0) return;
+    const diff = newQty - (row.quantity || 0);
+    if (diff === 0) { setEditingStockId(null); return; }
+    setSavingStock(true);
+    try {
+      await supabase.from("inventory").update({ quantity: newQty }).eq("id", row.id);
+      const { data: wineRow } = await supabase.from("wines").select("bottle_count").eq("id", wine.id).maybeSingle();
+      if (wineRow) {
+        await supabase.from("wines").update({ bottle_count: Math.max(0, (wineRow.bottle_count || 0) + diff) }).eq("id", wine.id);
+      }
+      await supabase.from("inventory_movements").insert({
+        wine_id: wine.id, quantity_change: diff, movement_type: "adjustment",
+        source: "wine_detail", notes: `${row.location}: ${row.quantity} → ${newQty}`,
+      });
+      setStockRows(prev => prev.map(r => r.id === row.id ? { ...r, quantity: newQty } : r));
+      setEditingStockId(null);
+    } catch (e) { console.error(e); }
+    setSavingStock(false);
+  };
 
   if (!wine) return null;
 
@@ -56,6 +94,7 @@ export default function WineDetail({ wine, onClose, onEdit, onAdjustStock, onOpe
 
   const tabs = [
     { key: "overview", label: "Overview" },
+    { key: "stock", label: `Stock${stockRows.length ? ` (${stockRows.reduce((s, r) => s + (r.quantity || 0), 0)})` : ""}` },
     { key: "pricing", label: "Pricing" },
     { key: "movements", label: "Movements" },
     { key: "btg", label: "BTG" },
@@ -153,6 +192,75 @@ export default function WineDetail({ wine, onClose, onEdit, onAdjustStock, onOpe
                 </div>
               )}
             </div>
+          </div>
+        )}
+
+        {activeTab === "stock" && (
+          <div className="animate-in">
+            {loadingStock ? (
+              <div className="loading-center" style={{ minHeight: 120 }}><div className="spinner" /></div>
+            ) : stockRows.length === 0 ? (
+              <div className="empty-state" style={{ padding: 24 }}>
+                <div className="empty-state-icon">🏪</div>
+                <div style={{ fontSize: 12 }}>No inventory records for this wine</div>
+              </div>
+            ) : (
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                {stockRows.map((row) => {
+                  const isEditing = editingStockId === row.id;
+                  const qty = row.quantity || 0;
+                  return (
+                    <div key={row.id} className="card" style={{ padding: 12 }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                        <div>
+                          <div style={{ fontSize: 13, fontWeight: 600, color: "var(--color-text-primary)" }}>
+                            📍 {row.location || "Unknown"}
+                          </div>
+                          {row.shelf_location && (
+                            <div style={{ fontSize: 11, color: "var(--color-text-tertiary)", marginTop: 2 }}>
+                              Shelf: {row.shelf_location}
+                            </div>
+                          )}
+                        </div>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                          {isEditing ? (
+                            <>
+                              <input
+                                type="number" min="0" value={editStockQty}
+                                onChange={(e) => setEditStockQty(e.target.value)}
+                                onKeyDown={(e) => e.key === "Enter" && handleStockSave(row)}
+                                className="input" style={{ width: 70, textAlign: "right", padding: "4px 8px" }}
+                                autoFocus
+                              />
+                              <button onClick={() => handleStockSave(row)} disabled={savingStock} className="btn btn-primary btn-sm">
+                                {savingStock ? "..." : "✓"}
+                              </button>
+                              <button onClick={() => setEditingStockId(null)} className="btn btn-ghost btn-sm">×</button>
+                            </>
+                          ) : (
+                            <>
+                              <span style={{
+                                fontSize: 20, fontWeight: 700,
+                                color: qty === 0 ? "#ef4444" : qty < 3 ? "#f97316" : ACCENT.green,
+                              }}>
+                                {qty}
+                              </span>
+                              <button
+                                onClick={() => { setEditingStockId(row.id); setEditStockQty(String(qty)); }}
+                                className="btn btn-ghost btn-sm"
+                              >✏️</button>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+                <div style={{ fontSize: 11, color: "var(--color-text-tertiary)", textAlign: "right", marginTop: 4 }}>
+                  Total across all locations: {stockRows.reduce((s, r) => s + (r.quantity || 0), 0)} bottles
+                </div>
+              </div>
+            )}
           </div>
         )}
 

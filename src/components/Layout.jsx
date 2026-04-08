@@ -9,7 +9,6 @@ const NAV = [
   { to: "/btg",       label: "By the Glass", icon: "🥂", ownerOnly: true },
   { to: "/revenue",   label: "Revenue",     icon: "💰", ownerOnly: true },
   { to: "/purchases", label: "Purchases",   icon: "🛒", ownerOnly: true },
-  { to: "/inventory", label: "Inventory",   icon: "🏪", ownerOnly: true },
 ];
 
 function getInitialTheme() {
