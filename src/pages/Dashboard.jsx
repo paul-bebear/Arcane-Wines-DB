@@ -88,7 +88,7 @@ const Tip = ({ active, payload, label }) => {
       </div>
       {payload.map((p, i) => (
         <div key={i} style={{ color: p.color || "var(--color-text-secondary)" }}>
-          {p.name}: {typeof p.value === "number" && p.value >= 10 ? fmt(p.value) : p.value}
+          {p.name}: {p.name === "Capital" ? fmt(p.value) : p.value?.toLocaleString("it-IT")}
         </div>
       ))}
     </div>
