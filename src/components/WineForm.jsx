@@ -207,7 +207,7 @@ export default function WineForm({ wine, producers, regions, onSave, onCancel, o
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-          <h2 style={{ fontSize: 18, fontWeight: 700, fontFamily: "'Playfair Display', serif", margin: 0, color: "var(--color-text-primary)" }}>
+          <h2 style={{ fontSize: 18, fontWeight: 700, margin: 0, color: "var(--color-text-primary)" }}>
             {isNew ? "Add Wine" : "Edit Wine"}
           </h2>
           <button onClick={onCancel} style={{ background: "none", border: "none", fontSize: 20, cursor: "pointer", color: "var(--color-text-tertiary)" }}>×</button>

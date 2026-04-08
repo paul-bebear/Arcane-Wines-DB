@@ -49,7 +49,6 @@ export default function Layout() {
         >
           <div style={{
             fontSize: collapsed ? 22 : 18, fontWeight: 700,
-            fontFamily: "'Playfair Display', serif",
             color: "var(--color-brand)",
             whiteSpace: "nowrap",
           }}>

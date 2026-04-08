@@ -33,7 +33,6 @@ export default function Login() {
           <div className="login-wine-icon">🍷</div>
           <div style={{
             fontSize: 28, fontWeight: 700,
-            fontFamily: "'Playfair Display', serif",
             color: "#9B95E8",
             marginBottom: 4,
           }}>

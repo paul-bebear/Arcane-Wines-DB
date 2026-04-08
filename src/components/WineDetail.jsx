@@ -113,7 +113,7 @@ export default function WineDetail({ wine, onClose, onEdit, onAdjustStock, onOpe
                 <span className="badge" style={{ background: CLR.red.bg, color: CLR.red.text }}>Reserved</span>
               )}
             </div>
-            <h2 style={{ fontSize: 20, fontWeight: 700, fontFamily: "'Playfair Display', serif", margin: 0, color: "var(--color-text-primary)" }}>
+            <h2 style={{ fontSize: 20, fontWeight: 700, margin: 0, color: "var(--color-text-primary)" }}>
               {wine.wine_name}
               {wine.vintage && <span style={{ fontWeight: 400, color: "var(--color-text-secondary)", marginLeft: 6 }}>{wine.vintage}</span>}
             </h2>

@@ -67,7 +67,7 @@ function StatCard({ label, value, sub, color }) {
   return (
     <Card style={{ textAlign: "center", padding: "16px 12px" }}>
       <div style={{ fontSize: 10, fontWeight: 600, color: "var(--color-text-tertiary)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 6 }}>{label}</div>
-      <div style={{ fontSize: 22, fontWeight: 700, color: color || "var(--color-text-primary)", fontFamily: "'Playfair Display', serif" }}>{value}</div>
+      <div style={{ fontSize: 22, fontWeight: 700, color: color || "var(--color-text-primary)" }}>{value}</div>
       {sub && <div style={{ fontSize: 11, color: "var(--color-text-secondary)", marginTop: 4 }}>{sub}</div>}
     </Card>
   );
