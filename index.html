@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Arcane Wines — Inventory management and business intelligence for wine bars. Track stock, pricing, revenue, and by-the-glass sessions." />
+    <title>Arcane Wines</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍷</text></svg>" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ── Light theme (default) ──────────────────────────── */
+      body {
+        background: #ffffff;
+        color: #111827;
+        --color-background-primary: #ffffff;
+        --color-background-secondary: #f9fafb;
+        --color-sidebar-bg: #f3f4f6;
+        --color-text-primary: #111827;
+        --color-text-secondary: #6b7280;
+        --color-text-tertiary: #9ca3af;
+        --color-border-secondary: #d1d5db;
+        --color-border-tertiary: #e5e7eb;
+        --color-brand: #7F77DD;
+        --color-nav-active: #ede9fe;
+      }
+
+      /* ── Dark theme (system) ────────────────────────────── */
+      @media (prefers-color-scheme: dark) {
+        body:not([data-theme="light"]) {
+          background: #0f0f11;
+          color: #f3f4f6;
+          --color-background-primary: #0f0f11;
+          --color-background-secondary: #1a1a1f;
+          --color-sidebar-bg: #141418;
+          --color-text-primary: #f3f4f6;
+          --color-text-secondary: #9ca3af;
+          --color-text-tertiary: #6b7280;
+          --color-border-secondary: #374151;
+          --color-border-tertiary: #1f2937;
+          --color-brand: #9B95E8;
+          --color-nav-active: #1e1b4b;
+        }
+      }
+
+      /* ── Dark theme (explicit) ──────────────────────────── */
+      body[data-theme="dark"] {
+        background: #0f0f11;
+        color: #f3f4f6;
+        --color-background-primary: #0f0f11;
+        --color-background-secondary: #1a1a1f;
+        --color-sidebar-bg: #141418;
+        --color-text-primary: #f3f4f6;
+        --color-text-secondary: #9ca3af;
+        --color-text-tertiary: #6b7280;
+        --color-border-secondary: #374151;
+        --color-border-tertiary: #1f2937;
+        --color-brand: #9B95E8;
+        --color-nav-active: #1e1b4b;
+      }
+
+      /* ── Light theme (explicit) ─────────────────────────── */
+      body[data-theme="light"] {
+        background: #ffffff;
+        color: #111827;
+        --color-background-primary: #ffffff;
+        --color-background-secondary: #f9fafb;
+        --color-sidebar-bg: #f3f4f6;
+        --color-text-primary: #111827;
+        --color-text-secondary: #6b7280;
+        --color-text-tertiary: #9ca3af;
+        --color-border-secondary: #d1d5db;
+        --color-border-tertiary: #e5e7eb;
+        --color-brand: #7F77DD;
+        --color-nav-active: #ede9fe;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
